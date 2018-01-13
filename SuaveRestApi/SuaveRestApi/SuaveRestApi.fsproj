@@ -56,8 +56,8 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Db.fs" />
-    <Compile Include="App.fs" />
     <Compile Include="Restful.fs" />
+    <Compile Include="App.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />
   </ItemGroup>

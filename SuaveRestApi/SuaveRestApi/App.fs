@@ -1,7 +1,17 @@
-﻿// Learn more about F# at http://fsharp.org
-// See the 'F# Tutorial' project for more help.
+﻿namespace SuaveRestApi
 
-[<EntryPoint>]
-let main argv = 
-    printfn "%A" argv
-    0 // return an integer exit code
+module App =   
+
+    open Suave.Web
+    open Suave.Successful
+    open SuaveRestApi.Rest
+    open SuaveRestApi.Db
+
+    [<EntryPoint>]
+    let main argv = 
+        let personWebPart = rest "people" { 
+            GetAll = Db.getPeople
+            Create = Db.createPerson
+        }
+        startWebServer defaultConfig personWebPart
+        0
