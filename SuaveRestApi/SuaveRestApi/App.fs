@@ -3,7 +3,6 @@
 module App =   
 
     open Suave.Web
-    open Suave.Successful
     open SuaveRestApi.Rest
     open SuaveRestApi.Db
 
