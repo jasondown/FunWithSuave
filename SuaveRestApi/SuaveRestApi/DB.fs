@@ -39,3 +39,6 @@ module Db =
 
     let updatePerson person =
         updatePersonById person.Id person
+
+    let deletePerson id =
+        peopleStorage.Remove(id) |> ignore
