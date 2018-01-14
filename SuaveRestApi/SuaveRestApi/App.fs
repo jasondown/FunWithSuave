@@ -11,6 +11,7 @@ module App =
         let personWebPart = rest "people" { 
             GetAll = Db.getPeople
             Create = Db.createPerson
+            Update = Db.updatePerson
         }
         startWebServer defaultConfig personWebPart
         0
