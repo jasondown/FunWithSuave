@@ -54,7 +54,7 @@ module Db =
                 Id          = p.Url.Substring(peopleUrl.Length) |> extractNumber
                 Name        = p.Name
                 BirthYear   = p.BirthYear
-                Email       = sprintf "%s@starwars.com" p.Name
+                Email       = sprintf "%s@starwars.com" <| p.Name.Replace(" ", "_")
             }
             peopleStorage.Add(newPerson.Id, newPerson))
     
