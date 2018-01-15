@@ -12,7 +12,6 @@ open System.Text
 module RestFul =  
     open Suave.Filters
     open Suave.RequestErrors
-    open SuaveRestApi.Db.Db
 
     type RestResource<'a> = {
         GetAll      : unit -> 'a seq
