@@ -20,7 +20,8 @@ module RestFul =
         Update      : 'a -> 'a option
         Delete      : int -> unit
         GetById     : int -> 'a option
-        updateById  : int -> 'a -> 'a option
+        UpdateById  : int -> 'a -> 'a option
+        Exists      : int -> bool
     }
 
     let JSON v =     
@@ -59,7 +60,13 @@ module RestFul =
             resource.GetById >> handleResource (NOT_FOUND "Resource not found")
 
         let updateResourceById id =
-            request (getResourceFromReq >> (resource.updateById id) >> handleResource badRequest)
+            request (getResourceFromReq >> (resource.UpdateById id) >> handleResource badRequest)
+
+        let resourceExists id =
+            match resource.Exists id with
+            | true  -> OK ""
+            | false -> NOT_FOUND ""
+            
 
         choose [
             path resourcePath >=> choose [
@@ -70,4 +77,5 @@ module RestFul =
             DELETE  >=> pathScan resourceIdPath deleteResourceById
             GET     >=> pathScan resourceIdPath getResourceById
             PUT     >=> pathScan resourceIdPath updateResourceById
+            HEAD    >=> pathScan resourceIdPath resourceExists
         ]

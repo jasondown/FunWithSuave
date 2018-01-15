@@ -12,6 +12,7 @@ type Person = {
 module Db =
     let private peopleStorage = new Dictionary<int, Person>()
     let getPeople () = peopleStorage.Values |> Seq.map id
+    let personExists = peopleStorage.ContainsKey
 
     let createPerson person =
         let id = peopleStorage.Values.Count + 1
@@ -25,7 +26,8 @@ module Db =
         newPerson
 
     let updatePersonById id person =
-        if peopleStorage.ContainsKey(id) then
+        match personExists id with
+        | true -> 
             let updatedPerson = {
                 Id      = id
                 Name    = person.Name
@@ -34,8 +36,8 @@ module Db =
             }
             peopleStorage.[id] <- updatedPerson
             Some updatedPerson
-        else 
-            None
+
+        | false -> None
 
     let updatePerson person =
         updatePersonById person.Id person
@@ -44,7 +46,6 @@ module Db =
         peopleStorage.Remove(id) |> ignore
 
     let getPerson id =
-        if peopleStorage.ContainsKey(id) then
-            Some peopleStorage.[id]
-        else
-            None
+        match personExists id with
+        | true -> Some peopleStorage.[id]
+        | false -> None
