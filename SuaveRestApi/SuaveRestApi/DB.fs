@@ -42,3 +42,9 @@ module Db =
 
     let deletePerson id =
         peopleStorage.Remove(id) |> ignore
+
+    let getPerson id =
+        if peopleStorage.ContainsKey(id) then
+            Some peopleStorage.[id]
+        else
+            None

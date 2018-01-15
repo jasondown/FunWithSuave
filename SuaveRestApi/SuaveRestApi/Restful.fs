@@ -12,12 +12,15 @@ open System.Text
 module RestFul =  
     open Suave.Filters
     open Suave.RequestErrors
+    open SuaveRestApi.Db.Db
 
     type RestResource<'a> = {
-        GetAll : unit -> 'a seq
-        Create : 'a -> 'a
-        Update : 'a -> 'a option
-        Delete : int -> unit
+        GetAll      : unit -> 'a seq
+        Create      : 'a -> 'a
+        Update      : 'a -> 'a option
+        Delete      : int -> unit
+        GetById     : int -> 'a option
+        updateById  : int -> 'a -> 'a option
     }
 
     let JSON v =     
@@ -52,11 +55,19 @@ module RestFul =
             resource.Delete id
             NO_CONTENT
 
+        let getResourceById =
+            resource.GetById >> handleResource (NOT_FOUND "Resource not found")
+
+        let updateResourceById id =
+            request (getResourceFromReq >> (resource.updateById id) >> handleResource badRequest)
+
         choose [
             path resourcePath >=> choose [
                 GET     >=> getAll
                 POST    >=> request (getResourceFromReq >> resource.Create >> JSON)
                 PUT     >=> request (getResourceFromReq >> resource.Update >> handleResource badRequest)
             ]
-            DELETE >=> pathScan resourceIdPath deleteResourceById
+            DELETE  >=> pathScan resourceIdPath deleteResourceById
+            GET     >=> pathScan resourceIdPath getResourceById
+            PUT     >=> pathScan resourceIdPath updateResourceById
         ]
